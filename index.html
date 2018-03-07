@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Chat Fuel Messenger Extension - WebView</title>
+    </head>
+    <body>
+        <!-- Facebook Messenger SDK -->
+        <script>
+            (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'Messenger'));
+        </script>
+        <ul>
+            <li><input type="radio" name="select_action" id="selectActionOne" value="0">Tier5</li>
+            <li><input type="radio" name="select_action" id="selectActionTwo" value="1">TextinBulk</li>
+            <li><input type="radio" name="select_action" id="selectActionThree" value="2">Digital Employee ID</li>
+        </ul>
+        <script>
+            window.extAsyncInit = function() {
+                var request = function (method, url) {
+                    return new Promise(function(resolve, reject) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open(method, url);
+
+                        xhr.onload = function() {
+                            if (xhr.status == 200) {
+                                resolve(JSON.parse(xhr.response));
+                            } else {
+                                reject(Error(xhr.statusText));
+                            }
+                        };
+
+                        xhr.onerror = function() {
+                            reject(Error("Network Error"));
+                        };
+
+                        xhr.send();
+                    });
+                }
+
+                var sendBackToChatThread = function (action, psID) {
+                    var sendURL = '/send?action=' + action + '&psid=' + psID;
+
+                    request('GET', sendURL).then(function (response) {
+                        console.log(response);
+                    }, function(error) {
+                        console.error(error);
+                    });
+                    MessengerExtensions.requestCloseBrowser();
+                }
+
+                var handleUserAction = function(psID) {
+                    var actions = document.querySelectorAll('input[name="select_action"]');
+
+                    actions.forEach(function (action) {
+                        action.addEventListener('click', function () {
+                            sendBackToChatThread(action.value, psID);
+                        })
+                    });
+                }
+
+                MessengerExtensions.getContext('228036937769463', 
+                    function success(thread_context) {
+                        console.log(thread_context);
+                        handleUserAction(thread_context.psid);
+                    }, function error(error) {
+                        console.log(error);
+                    }
+                );
+            };
+        </script>
+    </body>
+</html>

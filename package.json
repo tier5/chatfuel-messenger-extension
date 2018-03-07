@@ -1,0 +1,24 @@
+{
+  "name": "chatfuel-messenger-extension",
+  "version": "1.0.0",
+  "description": "ChatFuel Messenger Extension - WebView",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tier5/chatfuel-messenger-extension.git"
+  },
+  "author": "Jon Vaughn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tier5/chatfuel-messenger-extension/issues"
+  },
+  "homepage": "https://github.com/tier5/chatfuel-messenger-extension#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.2"
+  }
+}
